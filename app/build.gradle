@@ -80,6 +80,15 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:$camerax_view_version"
 
+    //TensorFlow Lite
+    def tflite_support_version = "0.1.0-rc1"
+    implementation "org.tensorflow:tensorflow-lite-support:$tflite_support_version"
+    def tflite_metadata_version = "0.1.0-rc2"
+    implementation "org.tensorflow:tensorflow-lite-metadata:$tflite_metadata_version"
+    def tflite_gpu_version = "2.3.0"
+    implementation "org.tensorflow:tensorflow-lite-gpu:$tflite_gpu_version"
+
+
     def dexter_version = "6.2.1"
     //Dexter - Permission Library
     implementation "com.karumi:dexter:$dexter_version"
