@@ -2,10 +2,12 @@ package com.example.whatamieating
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -73,16 +75,27 @@ class CameraFragment : Fragment() {
                     it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                 }
 
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val imageAnalyzer = ImageAnalysis.Builder()
+                .setTargetResolution(Size(192, 192))
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+                .also { analysisUseCase: ImageAnalysis ->
+                    analysisUseCase.setAnalyzer(
+                        cameraExecutor,
+                        ImageAnalyzer(requireContext()) { items ->
+                            Timber.i(items.toString())
+                        })
+                }
+
+            val cameraSelector =
+                if (cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA))
+                    CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
 
             try {
-                // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
 
-                // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview
+                    this, cameraSelector, preview, imageAnalyzer
                 )
 
             } catch (exc: Exception) {
