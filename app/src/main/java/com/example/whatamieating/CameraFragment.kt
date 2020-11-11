@@ -12,6 +12,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.whatamieating.databinding.FragmentCameraBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -26,6 +27,7 @@ import java.util.concurrent.Executors
 
 class CameraFragment : Fragment() {
     private lateinit var binding: FragmentCameraBinding
+    private val viewModel by viewModels<CameraViewModel>()
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -40,6 +42,9 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val adapter = RecognitionAdapter()
+        binding.recView.adapter = adapter
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -59,6 +64,12 @@ class CameraFragment : Fragment() {
                 ) { /* ... */
                 }
             }).check()
+
+        viewModel.recognitionList.observe(viewLifecycleOwner) {
+            it?.let {
+                adapter.submitList(it)
+            }
+        }
     }
 
     private fun startCamera() {
@@ -84,6 +95,7 @@ class CameraFragment : Fragment() {
                         cameraExecutor,
                         ImageAnalyzer(requireContext()) { items ->
                             Timber.i(items.toString())
+                            viewModel.updateData(items)
                         })
                 }
 
