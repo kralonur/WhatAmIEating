@@ -2,14 +2,17 @@ package com.example.whatamieating
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.whatamieating.databinding.FragmentCameraBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -24,6 +27,7 @@ import java.util.concurrent.Executors
 
 class CameraFragment : Fragment() {
     private lateinit var binding: FragmentCameraBinding
+    private val viewModel by viewModels<CameraViewModel>()
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -38,6 +42,9 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val adapter = RecognitionAdapter()
+        binding.recView.adapter = adapter
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -57,6 +64,12 @@ class CameraFragment : Fragment() {
                 ) { /* ... */
                 }
             }).check()
+
+        viewModel.recognitionList.observe(viewLifecycleOwner) {
+            it?.let {
+                adapter.submitList(it)
+            }
+        }
     }
 
     private fun startCamera() {
@@ -73,16 +86,28 @@ class CameraFragment : Fragment() {
                     it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                 }
 
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val imageAnalyzer = ImageAnalysis.Builder()
+                .setTargetResolution(Size(192, 192))
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+                .also { analysisUseCase: ImageAnalysis ->
+                    analysisUseCase.setAnalyzer(
+                        cameraExecutor,
+                        ImageAnalyzer(requireContext()) { items ->
+                            Timber.i(items.toString())
+                            viewModel.updateData(items)
+                        })
+                }
+
+            val cameraSelector =
+                if (cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA))
+                    CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
 
             try {
-                // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
 
-                // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview
+                    this, cameraSelector, preview, imageAnalyzer
                 )
 
             } catch (exc: Exception) {
