@@ -4,6 +4,9 @@ plugins {
     id 'kotlin-kapt'
 }
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -14,6 +17,9 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+
+
+        buildConfigField "String", "SPOONACULAR_API_KEY", localProperties['apiKey']
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -95,4 +101,19 @@ dependencies {
     def dexter_version = '6.2.2'
     //Dexter - Permission Library
     implementation "com.karumi:dexter:$dexter_version"
+
+    def moshi_version = '1.11.0'
+    //Moshi
+    implementation "com.squareup.moshi:moshi:$moshi_version"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+
+    def retrofit_version = "2.9.0"
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+
+    def okhttp_version = '4.9.0'
+    //OkHttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 }
