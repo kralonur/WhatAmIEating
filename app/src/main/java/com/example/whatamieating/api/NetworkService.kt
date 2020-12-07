@@ -1,5 +1,6 @@
 package com.example.whatamieating.api
 
+import com.example.whatamieating.api.service.RecipeService
 import com.example.whatamieating.util.Constants
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -42,5 +43,5 @@ private inline fun <reified T> createService(): T =
     getRetrofit().create(T::class.java)
 
 object NetworkService {
-
+    fun getRecipeService() = createService<RecipeService>()
 }
