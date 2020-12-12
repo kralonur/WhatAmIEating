@@ -75,7 +75,7 @@ dependencies {
     //Timber
     implementation "com.jakewharton.timber:timber:$timber_version"
 
-    def nav_version = "2.3.1"
+    def nav_version = "2.3.2"
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
@@ -116,4 +116,9 @@ dependencies {
     //OkHttp
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    def glide_version = '4.11.0'
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+
 }

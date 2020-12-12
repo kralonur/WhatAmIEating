@@ -10,6 +10,7 @@ data class RecipeInformation(
     val dishId: Int,
     val creditText: String,
     val shortInstruction: String,
+    val summary: String,
     val steps: List<Step>,
     val nutrients: List<Nutrient>,
     val ingredients: List<Ingredient>,
