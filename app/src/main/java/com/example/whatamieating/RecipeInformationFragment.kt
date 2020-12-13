@@ -53,13 +53,13 @@ class RecipeInformationFragment : Fragment() {
             when (it) {
                 ResultWrapper.Loading -> Timber.i("loading")
                 is ResultWrapper.Success -> {
-                    binding.textView4.text = it.value.dishName
-                    binding.textView5.text = "${it.value.cookingTime} minutes"
-                    binding.textView6.text = "${it.value.likesCount} likes"
+                    binding.fragmentInfoFoodTitle.text = it.value.dishName
+                    binding.fragmentInfoFoodTime.text = "${it.value.cookingTime} minutes"
+                    binding.fragmentInfoFoodLike.text = "${it.value.likesCount} likes"
                     binding.fragmentInfoCredit.text = "written by ${it.value.creditText}"
                     Glide.with(requireContext())
                         .load(it.value.dishImageUrl)
-                        .into(binding.imageView)
+                        .into(binding.fragmentInfoImage)
                 }
                 ResultWrapper.Error -> requireContext().showShortText("unknown error")
                 ResultWrapper.NetworkError -> requireContext().showShortText("no internet")

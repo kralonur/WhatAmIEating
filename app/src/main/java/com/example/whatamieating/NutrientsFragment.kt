@@ -38,7 +38,7 @@ class NutrientsFragment : Fragment() {
                 is ResultWrapper.Success -> {
                     val list = mutableListOf("<h2><strong>Properties:</strong></h2>")
                     list += it.value.properties.map { property -> "${property.title}: ${property.amount} ${property.unit}" }
-                    list += listOf("","<h2><strong>Nutrients:</strong></h2>")
+                    list += listOf("", "<h2><strong>Nutrients:</strong></h2>")
                     list += it.value.nutrients.map { nutrient -> "${nutrient.title}: ${nutrient.amount} ${nutrient.unit}" }
                     list += listOf("", "<h2><strong>Flavanoids:</strong></h2>")
                     list += it.value.flavanoids.map { flavanoid -> "${flavanoid.title}: ${flavanoid.amount} ${flavanoid.unit}" }
