@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">What Am I Eating</string>
+    <string name="overview">Overview</string>
+    <string name="steps">Steps</string>
+    <string name="nutrients">Nutrients</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="summary">Summary</string>
 </resources>

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView"
+        android:id="@+id/item_recipe_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
@@ -18,7 +18,7 @@
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView3"
+        android:id="@+id/item_recipe_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
