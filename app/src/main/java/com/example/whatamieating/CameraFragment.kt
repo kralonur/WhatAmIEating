@@ -13,6 +13,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.whatamieating.databinding.FragmentCameraBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -25,7 +26,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 
-class CameraFragment : Fragment() {
+class CameraFragment : Fragment(), RecognitionClickListener {
     private lateinit var binding: FragmentCameraBinding
     private val viewModel by viewModels<CameraViewModel>()
 
@@ -43,7 +44,7 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = RecognitionAdapter()
+        val adapter = RecognitionAdapter(this)
         binding.recView.adapter = adapter
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -70,6 +71,12 @@ class CameraFragment : Fragment() {
                 adapter.submitList(it)
             }
         }
+    }
+
+    override fun onClick(recognition: Recognition) {
+        findNavController().navigate(
+            CameraFragmentDirections.actionCameraFragmentToRecipeListFragment(recognition.label)
+        )
     }
 
     private fun startCamera() {

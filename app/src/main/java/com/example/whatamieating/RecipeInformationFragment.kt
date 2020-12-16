@@ -1,11 +1,18 @@
 package com.example.whatamieating
 
+import android.content.Context
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.whatamieating.databinding.FragmentRecipeInformationBinding
 import com.example.whatamieating.model.domain.ResultWrapper
@@ -16,6 +23,8 @@ import timber.log.Timber
 class RecipeInformationFragment : Fragment() {
     private val viewModel by activityViewModels<RecipeInformationViewModel>()
     private lateinit var binding: FragmentRecipeInformationBinding
+    private val args by navArgs<RecipeInformationFragmentArgs>()
+
 
     private val fragments by lazy {
         listOf(
@@ -47,7 +56,9 @@ class RecipeInformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.updateRecipeId(638218)
+        val recipeId = args.recipeId
+
+        viewModel.updateRecipeId(recipeId)
 
         viewModel.recipeInfo.observe(viewLifecycleOwner) {
             when (it) {
@@ -75,12 +86,58 @@ class RecipeInformationFragment : Fragment() {
 
         binding.viewPager.apply {
             this.adapter = adapter
-            offscreenPageLimit = fragments.size
+            offscreenPageLimit = 1
         }
+
+        (binding.viewPager.getChildAt(0) as RecyclerView).overScrollMode =
+            RecyclerView.OVER_SCROLL_NEVER
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = titles.getOrNull(position)
         }.attach()
+
+        binding.viewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val view = childFragmentManager.findFragmentByTag("f$position")?.view
+                adjustViewPagerFragmentHeight(view)
+            }
+        })
+    }
+
+    private fun adjustViewPagerFragmentHeight(view: View?) {
+        view?.let {
+            it.post {
+                val displayMetrics = DisplayMetrics()
+                requireActivity().windowManager.defaultDisplay.getRealMetrics(displayMetrics)
+                val desiredMinHeight = displayMetrics.heightPixels - dpToPx(requireContext(), 256)
+
+                val wMeasureSpec =
+                    View.MeasureSpec.makeMeasureSpec(it.width, View.MeasureSpec.EXACTLY)
+                val hMeasureSpec =
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                it.measure(wMeasureSpec, hMeasureSpec)
+
+                val desiredHeight = if (desiredMinHeight < it.measuredHeight) {
+                    it.measuredHeight
+                } else {
+                    desiredMinHeight
+                }
+
+                binding.viewPager.layoutParams =
+                    (binding.viewPager.layoutParams as ConstraintLayout.LayoutParams)
+                        .also { layoutParams -> layoutParams.height = desiredHeight }
+
+                it.layoutParams = (it.layoutParams as FrameLayout.LayoutParams)
+                    .also { layoutParams -> layoutParams.height = desiredHeight }
+            }
+        }
+    }
+
+
+    private fun dpToPx(context: Context, dp: Int): Int {
+        return (dp * (context.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)).toInt()
     }
 
 }

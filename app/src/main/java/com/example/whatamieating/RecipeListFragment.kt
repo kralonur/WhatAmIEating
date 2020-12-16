@@ -6,13 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.whatamieating.databinding.FragmentRecipeListBinding
 import com.example.whatamieating.model.domain.ResultWrapper
+import com.example.whatamieating.model.remote.Result
 import com.example.whatamieating.util.showShortText
 
-class RecipeListFragment : Fragment() {
+class RecipeListFragment : Fragment(), ResultClickListener {
     private val viewModel by viewModels<RecipeListViewModel>()
     private lateinit var binding: FragmentRecipeListBinding
+    private val args by navArgs<RecipeListFragmentArgs>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,11 +31,13 @@ class RecipeListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = RecipeListAdapter()
+        val query = args.query
+
+        val adapter = RecipeListAdapter(this)
 
         binding.recView.adapter = adapter
 
-        viewModel.searchRecipe("kebap").observe(viewLifecycleOwner) {
+        viewModel.searchRecipe(query).observe(viewLifecycleOwner) {
             when (it) {
                 ResultWrapper.Loading -> requireContext().showShortText("Loading")
                 is ResultWrapper.Success -> {
@@ -42,5 +49,11 @@ class RecipeListFragment : Fragment() {
                 is ResultWrapper.ServerError -> requireContext().showShortText("Server Error: ${it.code}")
             }
         }
+    }
+
+    override fun onClick(result: Result) {
+        findNavController().navigate(
+            RecipeListFragmentDirections.actionRecipeListFragmentToRecipeInformationFragment(result.id)
+        )
     }
 }
