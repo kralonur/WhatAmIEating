@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.whatamieating.databinding.FragmentIngredientsBinding
+import com.example.whatamieating.model.domain.RecipeInformation
 import com.example.whatamieating.model.domain.ResultWrapper
 import com.example.whatamieating.ui.recipe_information.RecipeInformationViewModel
 import com.example.whatamieating.ui.recipe_information.recview.StringAdapter
-import com.example.whatamieating.util.showShortText
 import timber.log.Timber
 
 class IngredientsFragment : Fragment() {
@@ -36,14 +36,17 @@ class IngredientsFragment : Fragment() {
 
         viewModel.recipeInfo.observe(viewLifecycleOwner) {
             when (it) {
-                ResultWrapper.Loading -> Timber.i("loading")
-                is ResultWrapper.Success -> {
-                    adapter.submitList(it.value.ingredients.map { ingredient -> ingredient.desc })
+                is ResultWrapper.Success -> onResultSuccess(adapter, it)
+                else -> { //Errors handled on RecipeInformation fragment
                 }
-                ResultWrapper.Error -> requireContext().showShortText("unknown error")
-                ResultWrapper.NetworkError -> requireContext().showShortText("no internet")
-                is ResultWrapper.ServerError -> requireContext().showShortText("error code is: ${it.code}")
             }
         }
+    }
+
+    private fun onResultSuccess(
+        adapter: StringAdapter,
+        it: ResultWrapper.Success<RecipeInformation>
+    ) {
+        adapter.submitList(it.value.ingredients.map { ingredient -> ingredient.desc })
     }
 }

@@ -16,6 +16,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.whatamieating.R
 import com.example.whatamieating.databinding.FragmentRecipeInformationBinding
+import com.example.whatamieating.model.domain.RecipeInformation
 import com.example.whatamieating.model.domain.ResultWrapper
 import com.example.whatamieating.ui.recipe_information.ingredients.IngredientsFragment
 import com.example.whatamieating.ui.recipe_information.nutrients.NutrientsFragment
@@ -23,7 +24,6 @@ import com.example.whatamieating.ui.recipe_information.overview.OverviewFragment
 import com.example.whatamieating.ui.recipe_information.steps.StepsFragment
 import com.example.whatamieating.util.showShortText
 import com.google.android.material.tabs.TabLayoutMediator
-import timber.log.Timber
 
 class RecipeInformationFragment : Fragment() {
     private val viewModel by activityViewModels<RecipeInformationViewModel>()
@@ -67,19 +67,16 @@ class RecipeInformationFragment : Fragment() {
 
         viewModel.recipeInfo.observe(viewLifecycleOwner) {
             when (it) {
-                ResultWrapper.Loading -> Timber.i("loading")
-                is ResultWrapper.Success -> {
-                    binding.fragmentInfoFoodTitle.text = it.value.dishName
-                    binding.fragmentInfoFoodTime.text = "${it.value.cookingTime} minutes"
-                    binding.fragmentInfoFoodLike.text = "${it.value.likesCount} likes"
-                    binding.fragmentInfoCredit.text = "written by ${it.value.creditText}"
-                    Glide.with(requireContext())
-                        .load(it.value.dishImageUrl)
-                        .into(binding.fragmentInfoImage)
-                }
-                ResultWrapper.Error -> requireContext().showShortText("unknown error")
-                ResultWrapper.NetworkError -> requireContext().showShortText("no internet")
-                is ResultWrapper.ServerError -> requireContext().showShortText("error code is: ${it.code}")
+                ResultWrapper.Loading -> requireContext().showShortText(getString(R.string.loading))
+                is ResultWrapper.Success -> onResultSuccess(it)
+                ResultWrapper.Error -> requireContext().showShortText(getString(R.string.error))
+                ResultWrapper.NetworkError -> requireContext().showShortText(getString(R.string.network_error))
+                is ResultWrapper.ServerError -> requireContext().showShortText(
+                    getString(
+                        R.string.server_error,
+                        it.code
+                    )
+                )
             }
         }
 
@@ -109,6 +106,16 @@ class RecipeInformationFragment : Fragment() {
                 adjustViewPagerFragmentHeight(foundView)
             }
         })
+    }
+
+    private fun onResultSuccess(it: ResultWrapper.Success<RecipeInformation>) {
+        binding.fragmentInfoFoodTitle.text = it.value.dishName
+        binding.fragmentInfoFoodTime.text = getString(R.string.minutes, it.value.cookingTime)
+        binding.fragmentInfoFoodLike.text = getString(R.string.likes, it.value.likesCount)
+        binding.fragmentInfoCredit.text = getString(R.string.written_by, it.value.creditText)
+        Glide.with(requireContext())
+            .load(it.value.dishImageUrl)
+            .into(binding.fragmentInfoImage)
     }
 
     private fun adjustViewPagerFragmentHeight(view: View?) {

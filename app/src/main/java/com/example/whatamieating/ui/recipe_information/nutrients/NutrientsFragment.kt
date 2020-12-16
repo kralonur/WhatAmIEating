@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.whatamieating.databinding.FragmentNutrientsBinding
+import com.example.whatamieating.model.domain.RecipeInformation
 import com.example.whatamieating.model.domain.ResultWrapper
 import com.example.whatamieating.ui.recipe_information.RecipeInformationViewModel
 import com.example.whatamieating.ui.recipe_information.recview.StringAdapter
-import com.example.whatamieating.util.showShortText
-import timber.log.Timber
 
 class NutrientsFragment : Fragment() {
     private lateinit var binding: FragmentNutrientsBinding
@@ -36,21 +35,24 @@ class NutrientsFragment : Fragment() {
 
         viewModel.recipeInfo.observe(viewLifecycleOwner) {
             when (it) {
-                ResultWrapper.Loading -> Timber.i("loading")
-                is ResultWrapper.Success -> {
-                    val list = mutableListOf("<h2><strong>Properties:</strong></h2>")
-                    list += it.value.properties.map { property -> "${property.title}: ${property.amount} ${property.unit}" }
-                    list += listOf("", "<h2><strong>Nutrients:</strong></h2>")
-                    list += it.value.nutrients.map { nutrient -> "${nutrient.title}: ${nutrient.amount} ${nutrient.unit}" }
-                    list += listOf("", "<h2><strong>Flavanoids:</strong></h2>")
-                    list += it.value.flavanoids.map { flavanoid -> "${flavanoid.title}: ${flavanoid.amount} ${flavanoid.unit}" }
-
-                    adapter.submitList(list)
+                is ResultWrapper.Success -> onResultSuccess(it, adapter)
+                else -> { //Errors handled on RecipeInformation fragment
                 }
-                ResultWrapper.Error -> requireContext().showShortText("unknown error")
-                ResultWrapper.NetworkError -> requireContext().showShortText("no internet")
-                is ResultWrapper.ServerError -> requireContext().showShortText("error code is: ${it.code}")
             }
         }
+    }
+
+    private fun onResultSuccess(
+        it: ResultWrapper.Success<RecipeInformation>,
+        adapter: StringAdapter
+    ) {
+        val list = mutableListOf("<h2><strong>Properties:</strong></h2>")
+        list += it.value.properties.map { property -> "${property.title}: ${property.amount} ${property.unit}" }
+        list += listOf("", "<h2><strong>Nutrients:</strong></h2>")
+        list += it.value.nutrients.map { nutrient -> "${nutrient.title}: ${nutrient.amount} ${nutrient.unit}" }
+        list += listOf("", "<h2><strong>Flavanoids:</strong></h2>")
+        list += it.value.flavanoids.map { flavanoid -> "${flavanoid.title}: ${flavanoid.amount} ${flavanoid.unit}" }
+
+        adapter.submitList(list)
     }
 }
