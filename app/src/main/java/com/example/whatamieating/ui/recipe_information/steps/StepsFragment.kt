@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_information.steps
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.whatamieating.databinding.FragmentIngredientsBinding
+import com.example.whatamieating.databinding.FragmentStepsBinding
 import com.example.whatamieating.model.domain.ResultWrapper
+import com.example.whatamieating.ui.recipe_information.RecipeInformationViewModel
+import com.example.whatamieating.ui.recipe_information.recview.StringAdapter
 import com.example.whatamieating.util.showShortText
 import timber.log.Timber
 
-class IngredientsFragment : Fragment() {
-    private lateinit var binding: FragmentIngredientsBinding
+class StepsFragment : Fragment() {
+    private lateinit var binding: FragmentStepsBinding
     private val viewModel by activityViewModels<RecipeInformationViewModel>()
 
 
@@ -21,7 +23,7 @@ class IngredientsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentIngredientsBinding.inflate(inflater, container, false)
+        binding = FragmentStepsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -36,7 +38,7 @@ class IngredientsFragment : Fragment() {
             when (it) {
                 ResultWrapper.Loading -> Timber.i("loading")
                 is ResultWrapper.Success -> {
-                    adapter.submitList(it.value.ingredients.map { ingredient -> ingredient.desc })
+                    adapter.submitList(it.value.steps.map { step -> "${step.number}- ${step.stepInstruction}" })
                 }
                 ResultWrapper.Error -> requireContext().showShortText("unknown error")
                 ResultWrapper.NetworkError -> requireContext().showShortText("no internet")

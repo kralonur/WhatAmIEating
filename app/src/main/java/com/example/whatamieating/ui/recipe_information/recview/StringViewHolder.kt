@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_information.recview
 
 import android.os.Build
 import android.text.Html

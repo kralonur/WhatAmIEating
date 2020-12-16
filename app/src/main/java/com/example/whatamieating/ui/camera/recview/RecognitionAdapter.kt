@@ -1,10 +1,11 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.camera.recview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.whatamieating.databinding.ItemRecognitionBinding
+import com.example.whatamieating.model.domain.Recognition
 
 class RecognitionAdapter(private val clickListener: RecognitionClickListener) :
     ListAdapter<Recognition, RecognitionViewHolder>(ListItemCallback()) {

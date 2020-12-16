@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_information
 
 import android.content.Context
 import android.os.Bundle
@@ -14,8 +14,13 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.whatamieating.R
 import com.example.whatamieating.databinding.FragmentRecipeInformationBinding
 import com.example.whatamieating.model.domain.ResultWrapper
+import com.example.whatamieating.ui.recipe_information.ingredients.IngredientsFragment
+import com.example.whatamieating.ui.recipe_information.nutrients.NutrientsFragment
+import com.example.whatamieating.ui.recipe_information.overview.OverviewFragment
+import com.example.whatamieating.ui.recipe_information.steps.StepsFragment
 import com.example.whatamieating.util.showShortText
 import com.google.android.material.tabs.TabLayoutMediator
 import timber.log.Timber
@@ -100,8 +105,8 @@ class RecipeInformationFragment : Fragment() {
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                val view = childFragmentManager.findFragmentByTag("f$position")?.view
-                adjustViewPagerFragmentHeight(view)
+                val foundView = childFragmentManager.findFragmentByTag("f$position")?.view
+                adjustViewPagerFragmentHeight(foundView)
             }
         })
     }
@@ -109,9 +114,18 @@ class RecipeInformationFragment : Fragment() {
     private fun adjustViewPagerFragmentHeight(view: View?) {
         view?.let {
             it.post {
-                val displayMetrics = DisplayMetrics()
-                requireActivity().windowManager.defaultDisplay.getRealMetrics(displayMetrics)
-                val desiredMinHeight = displayMetrics.heightPixels - dpToPx(requireContext(), 256)
+                val outMetrics = DisplayMetrics()
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                    val display = requireActivity().display
+                    display?.getRealMetrics(outMetrics)
+                } else {
+                    @Suppress("DEPRECATION")
+                    val display = requireActivity().windowManager.defaultDisplay
+                    @Suppress("DEPRECATION")
+                    display.getMetrics(outMetrics)
+                }
+                val desiredMinHeight = outMetrics.heightPixels - dpToPx(requireContext(), 256)
 
                 val wMeasureSpec =
                     View.MeasureSpec.makeMeasureSpec(it.width, View.MeasureSpec.EXACTLY)

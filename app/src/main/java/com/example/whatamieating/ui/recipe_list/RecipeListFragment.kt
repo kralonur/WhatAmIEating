@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,8 @@ import androidx.navigation.fragment.navArgs
 import com.example.whatamieating.databinding.FragmentRecipeListBinding
 import com.example.whatamieating.model.domain.ResultWrapper
 import com.example.whatamieating.model.remote.Result
+import com.example.whatamieating.ui.recipe_list.recview.RecipeListAdapter
+import com.example.whatamieating.ui.recipe_list.recview.ResultClickListener
 import com.example.whatamieating.util.showShortText
 
 class RecipeListFragment : Fragment(), ResultClickListener {

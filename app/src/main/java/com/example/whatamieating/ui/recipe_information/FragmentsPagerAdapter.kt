@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_information
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

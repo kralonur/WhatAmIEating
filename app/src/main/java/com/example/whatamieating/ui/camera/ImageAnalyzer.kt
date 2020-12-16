@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.camera
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.example.whatamieating.ml.LiteModelAiyVisionClassifierFoodV11
+import com.example.whatamieating.model.domain.Recognition
 import com.example.whatamieating.util.YuvToRgbConverter
 import org.tensorflow.lite.gpu.CompatibilityList
 import org.tensorflow.lite.support.image.TensorImage

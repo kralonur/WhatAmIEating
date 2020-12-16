@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_information.recview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

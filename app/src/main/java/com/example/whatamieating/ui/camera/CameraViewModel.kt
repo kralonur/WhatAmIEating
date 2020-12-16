@@ -1,8 +1,9 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.camera
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.whatamieating.model.domain.Recognition
 
 class CameraViewModel : ViewModel() {
 

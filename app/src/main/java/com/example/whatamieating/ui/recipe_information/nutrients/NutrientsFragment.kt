@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_information.nutrients
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.whatamieating.databinding.FragmentNutrientsBinding
 import com.example.whatamieating.model.domain.ResultWrapper
+import com.example.whatamieating.ui.recipe_information.RecipeInformationViewModel
+import com.example.whatamieating.ui.recipe_information.recview.StringAdapter
 import com.example.whatamieating.util.showShortText
 import timber.log.Timber
 

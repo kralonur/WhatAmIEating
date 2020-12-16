@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.model.domain
 
 data class Recognition(val label: String, val confidence: Float) {
 

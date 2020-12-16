@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_list.recview
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide

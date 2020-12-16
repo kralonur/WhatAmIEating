@@ -1,7 +1,8 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.camera.recview
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.whatamieating.databinding.ItemRecognitionBinding
+import com.example.whatamieating.model.domain.Recognition
 
 class RecognitionViewHolder(private val binding: ItemRecognitionBinding) :
     RecyclerView.ViewHolder(binding.root) {

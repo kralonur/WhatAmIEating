@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData

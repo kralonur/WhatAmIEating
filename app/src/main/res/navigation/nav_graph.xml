@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.example.whatamieating.CameraFragment"
+        android:name="com.example.whatamieating.ui.camera.CameraFragment"
         android:label="CameraFragment">
         <action
             android:id="@+id/action_cameraFragment_to_recipeListFragment"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/recipeListFragment"
-        android:name="com.example.whatamieating.RecipeListFragment"
+        android:name="com.example.whatamieating.ui.recipe_list.RecipeListFragment"
         android:label="RecipeListFragment">
         <action
             android:id="@+id/action_recipeListFragment_to_recipeInformationFragment"
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/recipeInformationFragment"
-        android:name="com.example.whatamieating.RecipeInformationFragment"
+        android:name="com.example.whatamieating.ui.recipe_information.RecipeInformationFragment"
         android:label="RecipeInformationFragment">
         <argument
             android:name="recipeId"

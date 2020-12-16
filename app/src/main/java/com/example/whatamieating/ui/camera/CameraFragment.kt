@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.camera
 
 import android.Manifest
 import android.os.Bundle
@@ -15,6 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.whatamieating.databinding.FragmentCameraBinding
+import com.example.whatamieating.model.domain.Recognition
+import com.example.whatamieating.ui.camera.recview.RecognitionAdapter
+import com.example.whatamieating.ui.camera.recview.RecognitionClickListener
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
