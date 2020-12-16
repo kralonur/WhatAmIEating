@@ -14,8 +14,14 @@ class RecipeInformationRemoteToDomainMapper :
     Mapper<GetRecipeInformationResponse, RecipeInformation> {
     override fun map(input: GetRecipeInformationResponse): RecipeInformation {
 
-        val steps = input.analyzedInstructions?.get(0)?.steps?.map { stepRemoteToDomainMap(it) }
-            ?: emptyList()
+        val steps =
+            try {
+                input.analyzedInstructions?.get(0)?.steps?.map { stepRemoteToDomainMap(it) }
+                    ?: emptyList()
+
+            } catch (t: IndexOutOfBoundsException) {
+                emptyList()
+            }
 
         val ingredients =
             input.extendedIngredients?.map { ingredientRemoteToDomainMap(it) } ?: emptyList()

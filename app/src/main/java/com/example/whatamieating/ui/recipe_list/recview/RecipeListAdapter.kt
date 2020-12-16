@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_list.recview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.whatamieating.databinding.ItemRecipeBinding
 import com.example.whatamieating.model.remote.Result
 
-class RecipeListAdapter : ListAdapter<Result, RecipeListViewHolder>(ListItemCallback()) {
+class RecipeListAdapter(private val clickListener: ResultClickListener) :
+    ListAdapter<Result, RecipeListViewHolder>(ListItemCallback()) {
     private class ListItemCallback : DiffUtil.ItemCallback<Result>() {
         override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
             return oldItem.id == newItem.id
@@ -25,6 +26,6 @@ class RecipeListAdapter : ListAdapter<Result, RecipeListViewHolder>(ListItemCall
     }
 
     override fun onBindViewHolder(holder: RecipeListViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), clickListener)
     }
 }

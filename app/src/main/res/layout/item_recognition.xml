@@ -7,7 +7,7 @@
 
         <variable
             name="recognition"
-            type="com.example.whatamieating.Recognition" />
+            type="com.example.whatamieating.model.domain.Recognition" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

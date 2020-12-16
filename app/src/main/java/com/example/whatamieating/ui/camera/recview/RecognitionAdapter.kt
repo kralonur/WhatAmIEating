@@ -1,12 +1,14 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.camera.recview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.whatamieating.databinding.ItemRecognitionBinding
+import com.example.whatamieating.model.domain.Recognition
 
-class RecognitionAdapter : ListAdapter<Recognition, RecognitionViewHolder>(ListItemCallback()) {
+class RecognitionAdapter(private val clickListener: RecognitionClickListener) :
+    ListAdapter<Recognition, RecognitionViewHolder>(ListItemCallback()) {
 
     private class ListItemCallback : DiffUtil.ItemCallback<Recognition>() {
         override fun areItemsTheSame(oldItem: Recognition, newItem: Recognition): Boolean {
@@ -25,6 +27,6 @@ class RecognitionAdapter : ListAdapter<Recognition, RecognitionViewHolder>(ListI
     }
 
     override fun onBindViewHolder(holder: RecognitionViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), clickListener)
     }
 }

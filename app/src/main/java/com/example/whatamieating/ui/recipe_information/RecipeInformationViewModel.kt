@@ -1,4 +1,4 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui.recipe_information
 
 import androidx.lifecycle.*
 import com.example.whatamieating.repository.RecipeRepository

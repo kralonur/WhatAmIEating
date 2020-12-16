@@ -1,7 +1,8 @@
-package com.example.whatamieating
+package com.example.whatamieating.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.whatamieating.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
