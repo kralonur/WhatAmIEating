@@ -16,9 +16,11 @@ import com.example.whatamieating.model.remote.SearchRecipesResponse
 import com.example.whatamieating.ui.recipe_list.recview.RecipeListAdapter
 import com.example.whatamieating.ui.recipe_list.recview.ResultClickListener
 import com.example.whatamieating.util.showShortText
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipeListFragment : Fragment(), ResultClickListener {
-    private val viewModel by viewModels<RecipeListViewModel>()
+    private val viewModel: RecipeListViewModel by viewModels()
     private lateinit var binding: FragmentRecipeListBinding
     private val args by navArgs<RecipeListFragmentArgs>()
 

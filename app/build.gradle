@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'dagger.hilt.android.plugin'
 }
 
 def localProperties = new Properties()
@@ -125,5 +126,15 @@ dependencies {
     def aachart_version = '-SNAPSHOT'
     //AAChart - Chart Library
     implementation "com.github.AAChartModel:AAChartCore-Kotlin:$aachart_version"
+
+    def hilt_version = "2.28-alpha"
+    //Hilt - DI
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    def hilt_lifecycle = "1.0.0-alpha02"
+    //Hilt - Lifecycle
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_lifecycle"
+    kapt "androidx.hilt:hilt-compiler:$hilt_lifecycle"
 
 }
