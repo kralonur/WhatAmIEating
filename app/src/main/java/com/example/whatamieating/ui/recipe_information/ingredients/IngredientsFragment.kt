@@ -11,7 +11,6 @@ import com.example.whatamieating.model.domain.RecipeInformation
 import com.example.whatamieating.model.domain.ResultWrapper
 import com.example.whatamieating.ui.recipe_information.RecipeInformationViewModel
 import com.example.whatamieating.ui.recipe_information.recview.StringAdapter
-import timber.log.Timber
 
 class IngredientsFragment : Fragment() {
     private lateinit var binding: FragmentIngredientsBinding

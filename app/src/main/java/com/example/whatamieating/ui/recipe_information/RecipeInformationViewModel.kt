@@ -1,11 +1,13 @@
 package com.example.whatamieating.ui.recipe_information
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.whatamieating.repository.RecipeRepository
 import kotlinx.coroutines.Dispatchers
 
-class RecipeInformationViewModel : ViewModel() {
-    private val repo = RecipeRepository()
+class RecipeInformationViewModel @ViewModelInject constructor(
+    private val repo: RecipeRepository
+) : ViewModel() {
 
     private val _recipeId = MutableLiveData<Int>()
     val recipeId: LiveData<Int>
