@@ -1,17 +1,11 @@
 package com.example.whatamieating.repository
 
-import com.example.whatamieating.api.NetworkService
-import com.example.whatamieating.model.mapper.RecipeInformationRemoteToDomainMapper
+import com.example.whatamieating.model.domain.RecipeInformation
+import com.example.whatamieating.model.domain.ResultWrapper
+import com.example.whatamieating.model.remote.SearchRecipesResponse
+import kotlinx.coroutines.flow.Flow
 
-class RecipeRepository : BaseRepository() {
-    private val api = NetworkService.getRecipeService()
-
-    fun searchRecipe(query: String) = flowCall {
-        api.searchRecipe(query)
-    }
-
-    fun getRecipeInformation(recipeId: Int) = flowCall {
-        val getRecipeInformationResponse = api.getRecipeInformation(recipeId, true)
-        RecipeInformationRemoteToDomainMapper().map(getRecipeInformationResponse)
-    }
+interface RecipeRepository {
+    fun searchRecipe(query: String): Flow<ResultWrapper<SearchRecipesResponse>>
+    fun getRecipeInformation(recipeId: Int): Flow<ResultWrapper<RecipeInformation>>
 }
