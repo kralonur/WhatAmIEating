@@ -24,7 +24,9 @@ import com.example.whatamieating.ui.recipe_information.overview.OverviewFragment
 import com.example.whatamieating.ui.recipe_information.steps.StepsFragment
 import com.example.whatamieating.util.showShortText
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipeInformationFragment : Fragment() {
     private val viewModel by activityViewModels<RecipeInformationViewModel>()
     private lateinit var binding: FragmentRecipeInformationBinding
