@@ -1,7 +1,10 @@
 package com.example.whatamieating.ui.camera
 
 import android.Manifest
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +21,8 @@ import com.example.whatamieating.databinding.FragmentCameraBinding
 import com.example.whatamieating.model.domain.Recognition
 import com.example.whatamieating.ui.camera.recview.RecognitionAdapter
 import com.example.whatamieating.ui.camera.recview.RecognitionClickListener
+import com.example.whatamieating.util.showShortText
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -59,13 +64,20 @@ class CameraFragment : Fragment(), RecognitionClickListener {
                     startCamera()
                 }
 
-                override fun onPermissionDenied(response: PermissionDeniedResponse) { /* ... */
+                override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                    if (response.isPermanentlyDenied) {
+                        showSettingsDialog()
+                    } else {
+                        requireContext().showShortText("Camera permission not granted..")
+                        requireActivity().finish()
+                    }
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
                     permission: PermissionRequest?,
                     token: PermissionToken?
-                ) { /* ... */
+                ) {
+                    token?.continuePermissionRequest()
                 }
             }).check()
 
@@ -74,6 +86,37 @@ class CameraFragment : Fragment(), RecognitionClickListener {
                 adapter.submitList(it)
             }
         }
+    }
+
+    private fun showSettingsDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Need Permissions")
+            .setMessage(
+                "This app needs permission to run. You can grant" +
+                        "them in app settings."
+            )
+            .setPositiveButton(
+                "GOTO SETTINGS"
+            ) { dialog, _ ->
+                dialog.cancel()
+                openSettings()
+                requireActivity().finish()
+            }
+            .setNegativeButton(
+                "Cancel"
+            ) { dialog, _ ->
+                dialog.cancel()
+                requireActivity().finish()
+            }
+            .show()
+    }
+
+    // navigating user to app settings
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+        intent.data = uri
+        startActivity(intent)
     }
 
     override fun onClick(recognition: Recognition) {
