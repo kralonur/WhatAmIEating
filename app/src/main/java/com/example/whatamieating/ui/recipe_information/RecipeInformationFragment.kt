@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.whatamieating.R
+import com.example.whatamieating.databinding.DialogLottieBinding
 import com.example.whatamieating.databinding.FragmentRecipeInformationBinding
 import com.example.whatamieating.model.domain.RecipeInformation
 import com.example.whatamieating.model.domain.ResultWrapper
@@ -22,9 +24,13 @@ import com.example.whatamieating.ui.recipe_information.ingredients.IngredientsFr
 import com.example.whatamieating.ui.recipe_information.nutrients.NutrientsFragment
 import com.example.whatamieating.ui.recipe_information.overview.OverviewFragment
 import com.example.whatamieating.ui.recipe_information.steps.StepsFragment
+import com.example.whatamieating.util.showAlertDialog
 import com.example.whatamieating.util.showShortText
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RecipeInformationFragment : Fragment() {
@@ -32,6 +38,8 @@ class RecipeInformationFragment : Fragment() {
     private lateinit var binding: FragmentRecipeInformationBinding
     private val args by navArgs<RecipeInformationFragmentArgs>()
 
+    private lateinit var lottieBinding: DialogLottieBinding
+    private lateinit var lottieDialog: AlertDialog
 
     private val fragments by lazy {
         listOf(
@@ -67,7 +75,10 @@ class RecipeInformationFragment : Fragment() {
 
         viewModel.updateRecipeId(recipeId)
 
+        lottieBinding = DialogLottieBinding.inflate(layoutInflater)
+
         viewModel.recipeInfo.observe(viewLifecycleOwner) {
+            loadingDialog(it)
             when (it) {
                 ResultWrapper.Loading -> requireContext().showShortText(getString(R.string.loading))
                 is ResultWrapper.Success -> onResultSuccess(it)
@@ -108,6 +119,20 @@ class RecipeInformationFragment : Fragment() {
                 adjustViewPagerFragmentHeight(foundView)
             }
         })
+    }
+
+    private fun <T> loadingDialog(result: ResultWrapper<T>) {
+        if (result == ResultWrapper.Loading) {
+            lottieDialog = requireContext().showAlertDialog(lottieBinding.root)
+
+            lottieBinding.animationView.setAnimation(R.raw.recipe_info_lottie)
+            lottieBinding.animationView.playAnimation()
+        } else {
+            GlobalScope.launch {
+                delay(1000)
+                lottieDialog.dismiss()
+            }
+        }
     }
 
     private fun onResultSuccess(it: ResultWrapper.Success<RecipeInformation>) {
