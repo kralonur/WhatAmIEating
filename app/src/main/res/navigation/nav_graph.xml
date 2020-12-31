@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/cameraFragment">
+
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.whatamieating.ui.camera.CameraFragment"
+        android:label="CameraFragment">
+        <action
+            android:id="@+id/action_cameraFragment_to_recipeListFragment"
+            app:destination="@id/recipeListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recipeListFragment"
+        android:name="com.example.whatamieating.ui.recipe_list.RecipeListFragment"
+        android:label="RecipeListFragment">
+        <action
+            android:id="@+id/action_recipeListFragment_to_recipeInformationFragment"
+            app:destination="@id/recipeInformationFragment" />
+        <argument
+            android:name="query"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/recipeInformationFragment"
+        android:name="com.example.whatamieating.ui.recipe_information.RecipeInformationFragment"
+        android:label="RecipeInformationFragment">
+        <argument
+            android:name="recipeId"
+            app:argType="integer" />
+    </fragment>
+</navigation>
