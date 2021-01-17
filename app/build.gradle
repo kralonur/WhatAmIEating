@@ -58,7 +58,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    def material_version = '1.3.0-beta01'
+    def material_version = '1.3.0-rc01'
     //Material
     implementation "com.google.android.material:material:$material_version"
 
@@ -127,7 +127,7 @@ dependencies {
     //AAChart - Chart Library
     implementation "com.github.AAChartModel:AAChartCore-Kotlin:$aachart_version"
 
-    def hilt_version = '2.30.1-alpha'
+    def hilt_version = '2.31-alpha'
     //Hilt - DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"

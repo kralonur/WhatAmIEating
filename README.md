@@ -5,10 +5,10 @@
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-#### WhatAmIEating is a food recipe application. You can find recipes from camera feed using TensorFlow and fetches the recipe from Spoonacular API.
+#### WhatAmIEating is a food recipe application. You can find recipes from camera feed using TensorFlow and fetch the recipe from Spoonacular API.
 
 ## Interface
-Will be uploaded oncoming commits
+<img width="235" height="500" alt="camera_fragment" src="https://user-images.githubusercontent.com/18505576/104854915-744a9a00-591a-11eb-95b2-a21d98131808.png"> <img width="235" height="500" alt="recipe_list_fragment" src="https://user-images.githubusercontent.com/18505576/104854917-76145d80-591a-11eb-88df-fc9f5b146886.jpg"> <img width="235" height="500" alt="recipe_detail_fragment" src="https://user-images.githubusercontent.com/18505576/104854900-5b41e900-591a-11eb-85fd-39eaee4b60de.gif">
 
 ## Project setup
 
@@ -45,5 +45,5 @@ Based on mvvm architecture and repository pattern.
 - [**Timber**](https://github.com/JakeWharton/timber) for logging
 
 ## Possible future changes
-- Add search bar
+- <s>Add search bar</s>
 - Update UI
