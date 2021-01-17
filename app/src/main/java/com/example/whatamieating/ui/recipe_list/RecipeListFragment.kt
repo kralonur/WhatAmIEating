@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class RecipeListFragment : Fragment(), ResultClickListener {
@@ -32,6 +34,8 @@ class RecipeListFragment : Fragment(), ResultClickListener {
 
     private lateinit var lottieBinding: DialogLottieBinding
     private lateinit var lottieDialog: AlertDialog
+
+    private lateinit var query: String
 
 
     override fun onCreateView(
@@ -46,18 +50,42 @@ class RecipeListFragment : Fragment(), ResultClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val query = args.query
+        query = if (!viewModel.recipeQuery.value.isNullOrEmpty()) viewModel.recipeQuery.value
+            ?: args.query
+        else args.query
 
         val adapter = RecipeListAdapter(this)
 
         binding.recView.adapter = adapter
 
+        binding.topAppBar.menu.apply {
+            val searchItem = this.findItem(R.id.search)
+            val searchView = searchItem?.actionView as SearchView
+            searchView.queryHint = getString(R.string.search)
+            searchView.setIconifiedByDefault(false)
+            searchView.setQuery(query, true)
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        viewModel.setRecipeQuery(it)
+                        searchView.clearFocus()
+                        searchView.onActionViewCollapsed()
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?) = true
+            })
+        }
+
         lottieBinding = DialogLottieBinding.inflate(layoutInflater)
 
-        viewModel.searchRecipe(query).observe(viewLifecycleOwner) {
+        viewModel.setRecipeQuery(query)
+
+        viewModel.recipe.observe(viewLifecycleOwner) {
             loadingDialog(it)
             when (it) {
-                ResultWrapper.Loading -> requireContext().showShortText(getString(R.string.loading))
+                ResultWrapper.Loading -> Timber.i(getString(R.string.loading))
                 is ResultWrapper.Success -> onResultSuccess(it, adapter)
                 ResultWrapper.Error -> requireContext().showShortText(getString(R.string.error))
                 ResultWrapper.NetworkError -> requireContext().showShortText(getString(R.string.network_error))

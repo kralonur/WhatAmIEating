@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -31,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class RecipeInformationFragment : Fragment() {
@@ -80,7 +82,7 @@ class RecipeInformationFragment : Fragment() {
         viewModel.recipeInfo.observe(viewLifecycleOwner) {
             loadingDialog(it)
             when (it) {
-                ResultWrapper.Loading -> requireContext().showShortText(getString(R.string.loading))
+                ResultWrapper.Loading -> Timber.i(getString(R.string.loading))
                 is ResultWrapper.Success -> onResultSuccess(it)
                 ResultWrapper.Error -> requireContext().showShortText(getString(R.string.error))
                 ResultWrapper.NetworkError -> requireContext().showShortText(getString(R.string.network_error))
@@ -102,6 +104,10 @@ class RecipeInformationFragment : Fragment() {
         binding.viewPager.apply {
             this.adapter = adapter
             offscreenPageLimit = 1
+        }
+
+        binding.topAppBar.setNavigationOnClickListener {
+            findNavController().navigateUp()
         }
 
         (binding.viewPager.getChildAt(0) as RecyclerView).overScrollMode =
